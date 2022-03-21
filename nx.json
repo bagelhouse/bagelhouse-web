@@ -30,5 +30,5 @@
       }
     ]
   },
-  "defaultProject": "my-nest-app"
+  "defaultProject": "api"
 }

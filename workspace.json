@@ -1,6 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "my-nest-app": "apps/my-nest-app"
+    "api": "apps/api"
   }
 }
