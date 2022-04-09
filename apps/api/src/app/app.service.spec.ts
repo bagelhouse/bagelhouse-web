@@ -9,7 +9,6 @@ describe('AppService', () => {
     const app = await Test.createTestingModule({
       providers: [AppService],
     }).compile();
-
     service = app.get<AppService>(AppService);
   });
 

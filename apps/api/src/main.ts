@@ -8,7 +8,10 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 
+import { google } from 'googleapis';
+
 async function bootstrap() {
+  const test = google._options;
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
