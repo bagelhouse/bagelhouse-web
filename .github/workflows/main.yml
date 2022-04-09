@@ -17,7 +17,7 @@ jobs:
         name: Checkout [main]
         with:
           fetch-depth: 0
-          
+
       - uses: actions/setup-node@v1 
         with: 
           node-version: '14'
@@ -59,19 +59,7 @@ jobs:
       - run: npx nx affected --target=test --parallel --max-parallel=2
       - run: npx nx-cloud stop-all-agents
       - run: ls -a
-
-      - name: Step 4 - Output Cached Build
-        run: npx nx build
-      - run: ls -a
-
-      - name: Step 4 - upload build artifact to GH Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-without-markdown
-          path: |
-            dist
-            !dist/**/*.md
-          retention-days: 5
+      
   agents:
     runs-on: ubuntu-latest
     name: Agent 1
