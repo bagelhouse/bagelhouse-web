@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI/CD - Staging
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ env:
 
 # Only Main, Staging and Production branches will have access to distributed build cache writes
 jobs:
-  staging:
+  staging-CI:
     runs-on: ubuntu-latest
     environment: staging
     env: 
