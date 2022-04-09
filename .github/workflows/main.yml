@@ -52,7 +52,7 @@ jobs:
       - run: ls -a
 
       - name: Step 4 - Output Cached Build
-        run: nx build
+        run: npx nx build
       - run: ls -a
 
       - name: Step 4 - upload build artifact to GH Artifacts
