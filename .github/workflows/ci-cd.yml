@@ -1,0 +1,85 @@
+name: CI/CD
+on:
+  push:
+    branches:
+      - '*'
+
+env:
+  NX_CLOUD_ACCESS_TOKEN:  ${{secrets.NX_CLOUD_ACCESS_TOKEN_MAIN}}
+
+# Only Main, Staging and Production branches will have access to distributed build cache writes
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    environment: main
+    if: github.event_name != 'pull_request' && github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    steps:
+      - name: Step 1 - Checkout [main]
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Step 2 - Setup Node Env
+        uses: actions/setup-node@v1 
+        with: 
+          node-version: '14'
+      - run: npm install
+      - run: ls -a
+      
+      # nrwl-nx-action@v2 is a Reputable Source That Builds all the Bash Commands
+      - name: Step 3 - Test Before Deployment, Output Cached Build
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: lint,test,build
+          all: 'true'
+          nxCloud: 'true'
+
+      - name: Step 4 - upload build artifact to GH Artifacts for CD
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: |
+            dist
+            !dist/**/*.md
+          retention-days: 5
+
+  staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    env: 
+      NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_STAGING }}
+    if: github.event_name != 'pull_request' && github.event_name == 'push' && github.ref == 'refs/heads/staging' 
+    steps:
+      - name: Step 1 - Checkout [main]
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Step 2 - Setup Node Env
+        uses: actions/setup-node@v1 
+        with: 
+          node-version: '14'
+      - run: npm install
+      - run: ls -a
+
+      - name: Step 3 - Test Affected
+        run: npx nx affected --target=test
+
+      - name: Step 4 - Check for the latest Successful build and deployment on Main branch
+        uses: nrwl/last-successful-commit-action@v1
+        id: last_successful_commit
+        with:
+          branch: 'main'
+          workflow_id: 'ci-cd.yml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run nx affected -- --target=build --base=${{ steps.last_successful_commit.outputs.commit_hash }} --parallel --configuration=production
+
+      - name: Step 5 - upload build artifact to GH Artifacts for CD
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md
+          retention-days: 5
+        
