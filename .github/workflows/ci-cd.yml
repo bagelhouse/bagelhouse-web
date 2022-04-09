@@ -29,15 +29,12 @@ jobs:
           node-version: '14'
       - run: npm install
       - run: ls -a
-
-      - name: Step 3 - Test Affected
-        run: npx nx affected --target=test
-
-      - name: Step 4 - Output Cached Build
-        run: npx nx affected --target=build
+      
+      - name: Step 3 - Output Cached Build
+        run: npx nx build
       - run: ls -a
 
-      - name: Step 5 - upload build artifact to GH Artifacts for CD
+      - name: Step 4 - upload build artifact to GH Artifacts for CD
         uses: actions/upload-artifact@v3
         with:
           name: dist-without-markdown
