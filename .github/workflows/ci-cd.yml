@@ -1,0 +1,132 @@
+name: CI/CD
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+
+env:
+  NX_CLOUD_DISTRIBUTED_EXECUTION: true
+
+# Only Main Staging and Production branches will have access to distributed build cache writes
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    environment: main
+    env: 
+      NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_MAIN }}
+    if: ${{ github.event_name != 'pull_request' }} && ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Step 1 - Checkout [main]
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Step 2 - Setup Node Env
+        uses: actions/setup-node@v1 
+        with: 
+          node-version: '14'
+      - run: npm install
+      - run: ls -a
+
+      - name: Step 3 - Test Affected
+        run: npx nx affected --target=test
+
+      - name: Step 4 - Output Cached Build
+        run: npx nx build
+      - run: ls -a
+
+      - name: Step 5 - upload build artifact to GH Artifacts for CD
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md
+          retention-days: 5
+
+  staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    env: 
+      NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_STAGING }}
+    if: ${{ github.event_name != 'pull_request' }} && ${{ github.event_name == 'push' && github.ref == 'refs/heads/staging' }}
+    steps:
+      - name: Step 1 - Checkout [main]
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Step 2 - Setup Node Env
+        uses: actions/setup-node@v1 
+        with: 
+          node-version: '14'
+      - run: npm install
+      - run: ls -a
+
+      - name: Step 3 - Test Affected
+        run: npx nx affected --target=test
+
+      - name: Step 4 - Check for the latest Successful build and deployment on Main branch
+        uses: nrwl/last-successful-commit-action@v1
+        id: last_successful_commit
+        with:
+          branch: 'main'
+          workflow_id: 'ci-cd.yml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run nx affected -- --target=build --base=${{ steps.last_successful_commit.outputs.commit_hash }} --parallel --configuration=production
+
+
+      - name: Step 5 - upload build artifact to GH Artifacts for CD
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md
+          retention-days: 5
+          
+  pr:
+    runs-on: ubuntu-latest
+    environment: pull_request
+    env: 
+      NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_PULL_REQUEST }}
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Step 1 - Get the Head Ref
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      
+      - name: Step 2 - Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v2
+
+      - name: Step 3 - Set up node env and run Nx Cloud Cache-ing
+        uses: actions/setup-node@v1
+        with: 
+          node-version: '14'
+      - run: npm install
+      - run: npx nx-cloud start-ci-run
+      - run: npx nx affected --target=build --parallel --max-parallel=3
+      - run: npx nx affected --target=test --parallel --max-parallel=2
+      - run: npx nx-cloud stop-all-agents
+      - run: ls -a
+
+  agents:
+    runs-on: ubuntu-latest
+    name: Agent 1
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        agent: [ 1, 2, 3 ]
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with: 
+          node-version: '14'
+      - run: npm install
+      - name: Start Nx Agent ${{ matrix.agent }}
+        run: npx nx-cloud start-agent  
