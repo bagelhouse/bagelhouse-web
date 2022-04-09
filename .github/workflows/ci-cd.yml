@@ -51,7 +51,7 @@ jobs:
     environment: staging
     env: 
       NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_STAGING }}
-    if: ${{ github.event_name != 'pull_request' }} && ${{ github.event_name == 'push' && github.ref == 'refs/heads/staging' }}
+    if: github.event_name != 'pull_request' && github.event_name == 'push' && github.ref == 'refs/heads/staging' 
     steps:
       - name: Step 1 - Checkout [main]
         uses: actions/checkout@v2
