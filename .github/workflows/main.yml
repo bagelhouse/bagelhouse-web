@@ -31,13 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Step 1 - Get the Head Ref
+        uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      
+      - name: Step 2 - Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
-      - uses: actions/setup-node@v1
+
+      - name: Step 3 - Set up node env and run build
+        uses: actions/setup-node@v1
         with: 
           node-version: '14'
       - run: npm install
@@ -45,6 +49,15 @@ jobs:
       - run: npx nx affected --target=build --parallel --max-parallel=3
       - run: npx nx affected --target=test --parallel --max-parallel=2
       - run: npx nx-cloud stop-all-agents
+      
+      - name: Step 4 - upload build artifact to GH Artifacts
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md
+          retention-days: 5
   agents:
     runs-on: ubuntu-latest
     name: Agent 1
