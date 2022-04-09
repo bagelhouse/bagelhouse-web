@@ -2,7 +2,7 @@ name: CI/CD - Staging
 on:
   push:
     branches:
-      - '*'
+      - 'staging'
 env:
   NX_CLOUD_ACCESS_TOKEN:  ${{secrets.NX_CLOUD_ACCESS_TOKEN_MAIN}}
 
