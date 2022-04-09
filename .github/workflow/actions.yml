@@ -45,8 +45,7 @@ jobs:
       - run: npx nx affected --target=build --parallel --max-parallel=3
       - run: npx nx affected --target=test --parallel --max-parallel=2
       - run: npx nx-cloud stop-all-agents
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: dist-without-markdown
           path: |
