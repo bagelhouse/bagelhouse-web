@@ -1,0 +1,43 @@
+name: CI/CD
+on:
+  push:
+    branches:
+      - '*'
+env:
+  NX_CLOUD_ACCESS_TOKEN:  ${{secrets.NX_CLOUD_ACCESS_TOKEN_MAIN}}
+
+# Only Main, Staging and Production branches will have access to distributed build cache writes
+jobs:
+  main-CI:
+    runs-on: ubuntu-latest
+    environment: main
+    if: github.event_name != 'pull_request' && github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    steps:
+      - name: Step 1 - Checkout [main]
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Step 2 - Setup Node Env
+        uses: actions/setup-node@v1 
+        with: 
+          node-version: '14'
+      - run: npm install
+      - run: ls -a
+      
+      # nrwl-nx-action@v2 is a Reputable Source That Builds all the Bash Commands
+      - name: Step 3 - Test Before Deployment, Output Cached Build
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: lint,test,build
+          all: 'true'
+          nxCloud: 'true'
+
+      - name: Step 4 - upload build artifact to GH Artifacts for CD
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist #can be any build hash, if needed
+          path: |
+            dist
+            !dist/**/*.md
+          retention-days: 5
