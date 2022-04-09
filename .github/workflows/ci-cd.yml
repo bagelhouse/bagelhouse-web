@@ -89,7 +89,6 @@ jobs:
           
   pr:
     runs-on: ubuntu-latest
-    environment: pull_request
     env: 
       NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_PULL_REQUEST }}
     if: ${{ github.event_name == 'pull_request' }}
