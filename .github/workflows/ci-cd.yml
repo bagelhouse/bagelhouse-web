@@ -16,7 +16,7 @@ jobs:
     environment: main
     env: 
       NX_CLOUD_ACCESS_TOKEN:  ${{ secrets.NX_CLOUD_ACCESS_TOKEN_MAIN }}
-    if: ${{ github.event_name != 'pull_request' }} && ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: github.event_name != 'pull_request' && github.event_name == 'push' && github.ref == 'refs/heads/main' 
     steps:
       - name: Step 1 - Checkout [main]
         uses: actions/checkout@v2
