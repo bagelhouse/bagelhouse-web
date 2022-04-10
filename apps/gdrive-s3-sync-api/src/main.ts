@@ -13,7 +13,7 @@ import { google } from 'googleapis'
 async function bootstrap() {
   const test = google._options
   console.log(test.baseURL)
-  console.log('ANGELO TESTING!')
+  console.log('ANGELO TESTING! 123')
   const app = await NestFactory.create(AppModule)
   const globalPrefix = 'api'
   app.setGlobalPrefix(globalPrefix)
