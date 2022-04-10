@@ -1,16 +1,17 @@
 {
-  "root": "apps/api",
-  "sourceRoot": "apps/api/src",
+  "root": "apps/gdrive-s3-sync-api",
+  "sourceRoot": "apps/gdrive-s3-sync-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/api",
-        "main": "apps/api/src/main.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"],
+        "outputPath": "dist/apps/gdrive-s3-sync-api",
+        "main": "apps/gdrive-s3-sync-api/src/main.ts",
+        "tsConfig": "apps/gdrive-s3-sync-api/tsconfig.app.json",
+        "assets": ["apps/gdrive-s3-sync-api/src/assets"],
+        "poll": 2000,
         "generatePackageJson": true
       },
       "configurations": {
@@ -20,8 +21,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/api/src/environments/environment.ts",
-              "with": "apps/api/src/environments/environment.prod.ts"
+              "replace": "apps/gdrive-s3-sync-api/src/environments/environment.ts",
+              "with": "apps/gdrive-s3-sync-api/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -30,21 +31,21 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "api:build"
+        "buildTarget": "gdrive-s3-sync-api:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api/**/*.ts"]
+        "lintFilePatterns": ["apps/gdrive-s3-sync-api/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/api"],
+      "outputs": ["coverage/apps/gdrive-s3-sync-api"],
       "options": {
-        "jestConfig": "apps/api/jest.config.js",
+        "jestConfig": "apps/gdrive-s3-sync-api/jest.config.js",
         "passWithNoTests": true
       }
     },
@@ -52,7 +53,7 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "push": false,
-        "tags": ["api:latest", "api:v1"]
+        "tags": ["gdrive-s3-sync-api-production:latest", "gdrive-s3-sync-api-production:v1"]
       }
     }
   },

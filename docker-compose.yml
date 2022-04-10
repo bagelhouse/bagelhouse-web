@@ -20,26 +20,25 @@ services:
   #     - /usr/src/app/node_modules
   #   command: npx nx serve --host 0.0.0.0 --poll 2000
   api:
-    container_name: test-api
-    hostname: test_api
-    image: test_api
+    container_name: gdrive-s3-sync-api
+    hostname: gdrive-s3-sync-api
+    image: gdrive-s3-sync-api
     build:
       context: .
-      dockerfile: ./apps/api/Dockerfile
-      # target: development
+      dockerfile: ./apps/gdrive-s3-sync-api/Dockerfile
+      target: development
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - 3333:3333
       - 9229:9229
-    # command: npm run start:api
-    # env_file:
-    #   - .env
+    command: npm run start:api
+    env_file:
+      - .env
     networks:
       - test-network
 
 networks:
   test-network:
     driver: bridge
-

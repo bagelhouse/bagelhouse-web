@@ -30,5 +30,5 @@
       }
     ]
   },
-  "defaultProject": "api"
+  "defaultProject": "gdrive-s3-sync-api"
 }
