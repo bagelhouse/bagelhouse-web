@@ -1,45 +1,6 @@
-version: '3.7'
-
+version: '3.4'
 services:
-  # frontend:
-  #   container_name: test-frontend
-  #   hostname: test-frontend
-  #   image: test-frontend
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/docker-serve/Dockerfile.angular
-  #     target: development
-  #   ports:
-  #     - 4200:4200
-  #   networks:
-  #     - test-network
-  #   depends_on:
-  #     - api
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   command: npx nx serve --host 0.0.0.0 --poll 2000
-  api:
-    container_name: test-api
-    hostname: test_api
-    image: test_api
-    build:
-      context: .
-      dockerfile: ./apps/api/Dockerfile
-      # target: development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+  gdrive-s3-sync:
+    image: gdrive-s3-sync-api
     ports:
-      - 3333:3333
-      - 9229:9229
-    # command: npm run start:api
-    # env_file:
-    #   - .env
-    networks:
-      - test-network
-
-networks:
-  test-network:
-    driver: bridge
-
+      - '8081:3333'
