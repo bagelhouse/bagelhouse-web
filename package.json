@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
+    "start:api": "nx serve --project=gdrive-s3-sync-api",
+    "build:api": "nx build --project=gdrive-s3-sync-api",
     "build": "nx build",
     "test": "nx test",
     "nx": "nx"
