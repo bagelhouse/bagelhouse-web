@@ -43,7 +43,7 @@ jobs:
           retention-days: 5
       
       - name: Step 5 - build API image for AWS ECS
-      - run: npx nx docker gdrive-s3-sync-api
+        run: npx nx docker gdrive-s3-sync-api
 
     # Step 6 publish ECS image to AWS ECS 
     # - uses: actions/checkout@master
