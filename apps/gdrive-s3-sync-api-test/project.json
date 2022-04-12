@@ -1,0 +1,28 @@
+{
+  "root": "apps/gdrive-s3-sync-api-test",
+  "sourceRoot": "apps/gdrive-s3-sync-api-test/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/gdrive-s3-sync-api-test/cypress.json",
+        "devServerTarget": "gdrive-s3-sync-api:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "gdrive-s3-sync-api:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/gdrive-s3-sync-api-test/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["gdrive-s3-sync-api"]
+}

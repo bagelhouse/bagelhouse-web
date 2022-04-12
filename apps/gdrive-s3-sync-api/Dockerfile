@@ -9,7 +9,7 @@ RUN  npm install minimist &&\
 
 COPY . .
 
-RUN npm run build:api
+RUN npm run build:gdrive-s3-sync-api
 
 #! this is the production image
 FROM node:lts-alpine as production
