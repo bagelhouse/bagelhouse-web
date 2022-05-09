@@ -1,7 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "gdrive-s3-sync-api": "apps/gdrive-s3-sync-api",
-    "gdrive-s3-sync-api-test": "apps/gdrive-s3-sync-api-test"
+    "gdrive-s3-sync-api": "apps/gdrive-s3-sync-api"
   }
 }

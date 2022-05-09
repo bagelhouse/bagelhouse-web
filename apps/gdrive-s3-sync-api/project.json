@@ -8,7 +8,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/gdrive-s3-sync-api",
-        "main": "apps/gdrive-s3-sync-api/src/main.ts",
+        "main": "apps/gdrive-s3-sync-api/src/index.ts",
         "tsConfig": "apps/gdrive-s3-sync-api/tsconfig.app.json",
         "assets": ["apps/gdrive-s3-sync-api/src/assets"],
         "poll": 2000,
