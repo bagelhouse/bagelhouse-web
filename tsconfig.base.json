@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@gdrive-s3-sync-api/*": [
+          "apps/gdrive-s3-sync-api/*"
+      ] 
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

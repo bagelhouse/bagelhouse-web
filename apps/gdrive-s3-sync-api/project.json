@@ -8,7 +8,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/gdrive-s3-sync-api",
-        "main": "apps/gdrive-s3-sync-api/src/main.ts",
+        "main": "apps/gdrive-s3-sync-api/src/index.ts",
         "tsConfig": "apps/gdrive-s3-sync-api/tsconfig.app.json",
         "assets": ["apps/gdrive-s3-sync-api/src/assets"],
         "poll": 2000,
@@ -53,7 +53,10 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "push": false,
-        "tags": ["gdrive-s3-sync-api-production:latest", "gdrive-s3-sync-api-production:v1"]
+        "tags": [
+          "gdrive-s3-sync-api-production:latest",
+          "gdrive-s3-sync-api-production:v1"
+        ]
       }
     }
   },

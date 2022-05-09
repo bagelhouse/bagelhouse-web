@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing'
 
-import { AppService } from './app.service'
+import { AppService } from '@gdrive-s3-sync-api/src/app/app.service'
 
 describe('AppService', () => {
   let service: AppService
@@ -14,7 +14,7 @@ describe('AppService', () => {
 
   describe('getData', () => {
     it('should return "Welcome to my-nest-app!"', () => {
-      expect(service.getData()).toEqual({ message: 'Welcome to my-nest-app!' })
+      expect(service.getData()).toEqual({ data: 'Welcome to my-nest-app!' })
     })
   })
 })

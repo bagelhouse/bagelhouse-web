@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { AppController } from '@gdrive-s3-sync-api/src/app/app.controller'
+import { AppService } from '@gdrive-s3-sync-api/src/app/app.service'
 
 describe('AppController', () => {
   let app: TestingModule
@@ -17,7 +17,7 @@ describe('AppController', () => {
     it('should return "Welcome to my-nest-app!"', () => {
       const appController = app.get<AppController>(AppController)
       expect(appController.getData()).toEqual({
-        message: 'Welcome to my-nest-app!',
+        data: 'Welcome to my-nest-app!',
       })
     })
   })

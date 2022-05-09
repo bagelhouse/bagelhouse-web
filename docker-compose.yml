@@ -38,6 +38,16 @@ services:
       - .env
     networks:
       - test-network
+  cypress-e2e:
+    container_name: e2e_test
+    build:
+      context: ./e2e
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    # network_mode: host
+    networks:
+      - test-network
 
 networks:
   test-network:
